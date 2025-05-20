@@ -1,0 +1,107 @@
+university> use facultydb
+switched to db facultydb
+
+facultydb> db.professors.insertMany([
+...   {
+...     name: "Dr. Kavita Iyer",
+...     subject: "Mathematics",
+...     experience: 10,
+...     active: true
+...   },
+...   {
+...     name: "Dr. Nikhil Sinha",
+...     subject: "Physics",
+...     experience: 5,
+...     active: false
+...   },
+...   {
+...     name: "Dr. Meera Das",
+...     subject: "Chemistry",
+...     experience: 8,
+...     active: true
+...   }
+... ])
+...
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('682c5cebf19a0a32436c4bd0'),
+    '1': ObjectId('682c5cebf19a0a32436c4bd1'),
+    '2': ObjectId('682c5cebf19a0a32436c4bd2')
+  }
+}
+
+facultydb> db.professors.find().pretty()
+[
+  {
+    _id: ObjectId('682c5cebf19a0a32436c4bd0'),
+    name: 'Dr. Kavita Iyer',
+    subject: 'Mathematics',
+    experience: 10,
+    active: true
+  },
+  {
+    _id: ObjectId('682c5cebf19a0a32436c4bd1'),
+    name: 'Dr. Nikhil Sinha',
+    subject: 'Physics',
+    experience: 5,
+    active: false
+  },
+  {
+    _id: ObjectId('682c5cebf19a0a32436c4bd2'),
+    name: 'Dr. Meera Das',
+    subject: 'Chemistry',
+    experience: 8,
+    active: true
+  }
+]
+
+facultydb> db.professors.find({ active: true }).pretty()
+[
+  {
+    _id: ObjectId('682c5cebf19a0a32436c4bd0'),
+    name: 'Dr. Kavita Iyer',
+    subject: 'Mathematics',
+    experience: 10,
+    active: true
+  },
+  {
+    _id: ObjectId('682c5cebf19a0a32436c4bd2'),
+    name: 'Dr. Meera Das',
+    subject: 'Chemistry',
+    experience: 8,
+    active: true
+  }
+]
+
+facultydb> db.professors.updateOne(
+...   { subject: "Physics" },
+...   { $set: { experience: 6 } }
+... )
+...
+\{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+facultydb> db.professors.updateOne(
+...   { subject: "Physics" },
+...   { $set: { active: true } }
+... )
+...
+\{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+facultydb> db.professors.deleteOne({ subject: "Chemistry" })
+{ acknowledged: true, deletedCount: 1 }
+facultydb>
+
+
