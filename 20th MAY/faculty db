@@ -1,4 +1,4 @@
-university> use facultydb
+** university> use facultydb **
 switched to db facultydb
 
 facultydb> db.professors.insertMany([
