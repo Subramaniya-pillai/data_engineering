@@ -1,0 +1,77 @@
+1. Switch to the bugtracker database
+
+test> use bugtracker
+switched to db bugtracker
+
+
+2. Insert 3 bug reports into the bugs collection
+
+bugtracker> db.bugs.insertMany([
+...   {
+...     title: "Login button not working",
+...     reportedBy: "mani",
+...     status: "open",
+...     priority: "high",
+...     createdAt: new Date()
+...   },
+...   {
+...     title: "UI layout issue on mobile",
+...     reportedBy: "saravana",
+...     status: "in progress",
+...     priority: "medium",
+...     createdAt: new Date()
+...   },
+...   {
+...     title: "Typo in help section",
+...     reportedBy: "Test User",
+...     status: "closed",
+...     priority: "low",
+...     createdAt: new Date()
+...   }
+... ])
+...
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('682db85bbc80b2b1106c4bd0'),
+    '1': ObjectId('682db85bbc80b2b1106c4bd1'),
+    '2': ObjectId('682db85bbc80b2b1106c4bd2')
+  }
+}
+
+
+3. Query all bugs with status: "open" and priority: "high"
+
+bugtracker> db.bugs.find({ status: "open", priority: "high" })
+[
+  {
+    _id: ObjectId('682db85bbc80b2b1106c4bd0'),
+    title: 'Login button not working',
+    reportedBy: 'mani',
+    status: 'open',
+    priority: 'high',
+    createdAt: ISODate('2025-05-21T11:26:19.137Z')
+  }
+]
+
+
+4. Update the status of a specific bug to "closed"
+
+bugtracker> db.bugs.updateOne(
+...   { title: "Login button not working" },
+...   { $set: { status: "closed" } }
+... )
+...
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+5. Delete the bug reported by "Test User"
+
+bugtracker> db.bugs.deleteOne({ reportedBy: "Test User" })
+{ acknowledged: true, deletedCount: 1 }
+bugtracker>
