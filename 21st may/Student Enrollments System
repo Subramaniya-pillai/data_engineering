@@ -1,0 +1,73 @@
+// Task 1: Switch to the Database
+use campusdb
+
+// Task 2: Insert 4 Student Documents
+db.enrollments.insertMany([
+  {
+    name: "Ananya Verma",
+    studentId: 101,
+    courses: ["Python", "Java"],
+    address: { city: "Delhi", state: "Delhi" },
+    feesPaid: true
+  },
+  {
+    name: "Rohan Mehta",
+    studentId: 102,
+    courses: ["Python", "AI"],
+    address: { city: "Bangalore", state: "Karnataka" },
+    feesPaid: false
+  },
+  {
+    name: "Sneha Kapoor",
+    studentId: 103,
+    courses: [],
+    address: { city: "Hyderabad", state: "Telangana" },
+    feesPaid: true
+  },
+  {
+    name: "Imran Shaikh",
+    studentId: 104,
+    courses: ["Data Science", "Java"],
+    address: { city: "Delhi", state: "Delhi" },
+    feesPaid: false
+  }
+])
+
+// Task 3: Display All Student Records
+db.enrollments.find().pretty()
+
+// Task 4: Find All Students Enrolled in "Python"
+db.enrollments.find({ courses: "Python" })
+
+// Task 5: Find Students from Delhi Who Have Not Paid Fees
+db.enrollments.find({ 
+  "address.city": "Delhi", 
+  feesPaid: false 
+})
+
+// Task 6: Add a New Course "AI Fundamentals" to a Specific Student (e.g., studentId: 101)
+db.enrollments.updateOne(
+  { studentId: 101 },
+  { $addToSet: { courses: "AI Fundamentals" } }
+)
+
+// Task 7: Update the City of a Specific Student to "Mumbai" (e.g., studentId: 103)
+db.enrollments.updateOne(
+  { studentId: 103 },
+  { $set: { "address.city": "Mumbai" } }
+)
+
+// Task 8: Set feesPaid to true for All Students from "Delhi"
+db.enrollments.updateMany(
+  { "address.city": "Delhi" },
+  { $set: { feesPaid: true } }
+)
+
+// Task 9: Remove "Java" Course from Any Student Who Has It
+db.enrollments.updateMany(
+  { courses: "Java" },
+  { $pull: { courses: "Java" } }
+)
+
+// Task 10: Delete All Students Who Have No Courses Enrolled
+db.enrollments.deleteMany({ courses: { $size: 0 } })
