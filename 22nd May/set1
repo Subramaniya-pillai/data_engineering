@@ -118,7 +118,7 @@ db.employees.find({ rating: { $type: "double" } });
 db.employees.find({}, { _id: 0, name: 1, skills: 1 });
 
 
-<p align="center"> Section 2: One-to-One (Embedded) </p>
+<p align="center"><b>Section 2: One-to-One (Embedded)</b></p>
 
 // 1. Create database
 use schooldb
