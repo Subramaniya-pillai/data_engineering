@@ -1,0 +1,149 @@
+test> use trainingdb
+switched to db trainingdb
+
+// 2. Create 'employees' collection and insert documents
+
+
+trainingdb> db.employees.insertMany([
+...   {
+...     name: "king charles",
+...     age: 21,
+...     isManager: true,
+...     skills: ["JavaScript", "Node.js", "MongoDB","python"],
+...     joiningDate: new Date("2023-03-15"),
+...     profile: {
+...       linkedin: "linkedin.com/king",
+...       portfolio: "king.dev"
+...     }
+...   },
+...   {
+...     name: "Vineeth",
+...     age: 22,
+...     isManager: false,
+...     skills: ["Python", "Pandas"],
+...     joiningDate: new Date("2022-10-10"),
+...     profile: {
+...       linkedin: "linkedin.com/vineeth",
+...       portfolio: "vineeth.dev"
+...     }
+...   },
+...   {
+...     name: "nithya",
+...     age: 55,
+...     isManager: true,
+...     skills: ["Java", "Spring", "Hibernate", "SQL"],
+...     joiningDate: new Date("2023-07-01"),
+...     profile: {
+...       linkedin: "linkedin.com/nithya",
+...       portfolio: "nithya.dev"
+...     }
+...   },
+...   {
+...     name: "Diana",
+...     age: 25,
+...     isManager: false,
+...     skills: ["React", "CSS", "HTML"],
+...     joiningDate: new Date("2024-01-10"),
+...     profile: {
+...       linkedin: "linkedin.com/diana",
+...       portfolio: "diana.dev"
+...     }
+...   }
+... ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('683350d03c0284d5076c4bd0'),
+    '1': ObjectId('683350d03c0284d5076c4bd1'),
+    '2': ObjectId('683350d03c0284d5076c4bd2'),
+    '3': ObjectId('683350d03c0284d5076c4bd3')
+  }
+}
+
+// 4. Query: More than 2 skills and joined after a specific date
+
+trainingdb> db.employees.find({
+...   $expr: { $gt: [ { $size: "$skills" }, 2 ] },
+...   joiningDate: { $gt: new Date("2023-01-01") }
+... });
+...
+[
+  {
+    _id: ObjectId('683350d03c0284d5076c4bd0'),
+    name: 'king charles',
+    age: 21,
+    isManager: true,
+    skills: [ 'JavaScript', 'Node.js', 'MongoDB', 'python' ],
+    joiningDate: ISODate('2023-03-15T00:00:00.000Z'),
+    profile: { linkedin: 'linkedin.com/king', portfolio: 'king.dev' }
+  },
+  {
+    _id: ObjectId('683350d03c0284d5076c4bd2'),
+    name: 'nithya',
+    age: 55,
+    isManager: true,
+    skills: [ 'Java', 'Spring', 'Hibernate', 'SQL' ],
+    joiningDate: ISODate('2023-07-01T00:00:00.000Z'),
+    profile: { linkedin: 'linkedin.com/nithya', portfolio: 'nithya.dev' }
+  },
+  {
+    _id: ObjectId('683350d03c0284d5076c4bd3'),
+    name: 'Diana',
+    age: 25,
+    isManager: false,
+    skills: [ 'React', 'CSS', 'HTML' ],
+    joiningDate: ISODate('2024-01-10T00:00:00.000Z'),
+    profile: { linkedin: 'linkedin.com/diana', portfolio: 'diana.dev' }
+  }
+]
+
+
+// 5. Add a new field `rating` to one employee
+
+ trainingdb> db.employees.updateOne({ name: "Alice" }, { $set: { rating: 4.5 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+
+// 6. Find all employees with `rating` of type double
+db.employees.find({ rating: { $type: "double" } });
+
+
+// 7. Exclude _id, show only name and skills
+db.employees.find({}, { _id: 0, name: 1, skills: 1 });
+
+
+<p align="center"> Section 2: One-to-One (Embedded) </p>
+
+// 1. Create database
+use schooldb
+
+// 2. Insert students with embedded guardian
+db.students.insertMany([
+  {
+    name: "mani",
+    guardian: { name: "saravana", phone: "9600191888", relation: "Mother" }
+  },
+  {
+    name: "nithya",
+    guardian: { name: "shree", phone: "2345678901", relation: "husband" }
+  },
+  {
+    name: "Sam",
+    guardian: { name: "Nina", phone: "3456789012", relation: "Mother" }
+  }
+]);
+
+// 3. Query where guardian is 'Mother'
+db.students.find({ "guardian.relation": "Mother" });
+
+// 4. Update guardian phone for a specific student
+db.students.updateOne(
+  { name: "mani" },
+  { $set: { "guardian.phone": "9999999999" } }
+);
