@@ -1,3 +1,5 @@
+                                                          Section 1: Working with Schemas & Data Types
+
 test> use trainingdb
 switched to db trainingdb
 
@@ -118,7 +120,7 @@ db.employees.find({ rating: { $type: "double" } });
 db.employees.find({}, { _id: 0, name: 1, skills: 1 });
 
 
-<p align="center"><b>Section 2: One-to-One (Embedded)</b></p>
+                                                                        Section 2: One-to-One (Embedded)
 
 // 1. Create database
 use schooldb
@@ -147,3 +149,137 @@ db.students.updateOne(
   { name: "mani" },
   { $set: { "guardian.phone": "9999999999" } }
 );
+
+
+
+                                                                Section 3: One-to-Many (Embedded)
+
+
+
+// 1. In same schooldb, create teachers collection
+db.teachers.insertMany([
+  {
+    name: "Mr. subramani",
+    classes: ["Math", "Physics"]
+  },
+  {
+    name: "Mrs. Taylor",
+    classes: ["Biology", "Chemistry"]
+  }
+]);
+
+// 3. Query teachers who teach "Physics"
+db.teachers.find({ classes: "Physics" });
+
+// 4. Add "Robotics" class
+db.teachers.updateOne(
+  { name: "Mr. subramani" },
+  { $addToSet: { classes: "Robotics" } }
+);
+
+// 5. Remove "Math" from a teacher's class list
+db.teachers.updateOne(
+  { name: "Mr. subramani" },
+  { $pull: { classes: "Math" } }
+);
+
+
+                                                                  Section 4: One-to-Many (Referenced)
+
+
+
+// 1. Create database
+use academia
+
+// 2. Insert into courses
+db.courses.insertMany([
+  { _id: ObjectId("6651a11223aa111111111111"), title: "Machine Learning", credits: 4 },
+  { _id: ObjectId("6651a11223aa111111111112"), title: "Database Systems", credits: 3 }
+]);
+
+// 3. Insert students referencing courses
+db.students.insertMany([
+  { name: "Tom", enrolledCourse: ObjectId("6651a11223aa111111111111") },
+  { name: "Jerry", enrolledCourse: ObjectId("6651a11223aa111111111112") }
+]);
+
+// 4. Query students in a specific course
+db.students.find({ enrolledCourse: ObjectId("6651a11223aa111111111111") });
+
+// 5. Query course details by _id
+db.courses.find({ _id: ObjectId("6651a11223aa111111111111") });
+
+
+                                                                Section 4: One-to-Many (Referenced)
+
+
+
+// 1. Create database
+use academia
+
+// 2. Insert into courses
+db.courses.insertMany([
+  { _id: ObjectId("6651a11223aa111111111111"), title: "Machine Learning", credits: 4 },
+  { _id: ObjectId("6651a11223aa111111111112"), title: "Database Systems", credits: 3 }
+]);
+
+// 3. Insert students referencing courses
+db.students.insertMany([
+  { name: "Tom", enrolledCourse: ObjectId("6651a11223aa111111111111") },
+  { name: "Jerry", enrolledCourse: ObjectId("6651a11223aa111111111112") }
+]);
+
+// 4. Query students in a specific course
+db.students.find({ enrolledCourse: ObjectId("6651a11223aa111111111111") });
+
+// 5. Query course details by _id
+db.courses.find({ _id: ObjectId("6651a11223aa111111111111") });
+
+
+
+
+                                                            Section 5: $lookup (Join in Aggregation)
+
+// 1 & 2. Use $lookup to join students and courses
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "courses",
+      localField: "enrolledCourse",
+      foreignField: "_id",
+      as: "courseInfo"
+    }
+  },
+  {
+    $unwind: "$courseInfo"
+  },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      courseTitle: "$courseInfo.title"
+    }
+  }
+]);
+
+// 4. $match after $lookup for "Machine Learning"
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "courses",
+      localField: "enrolledCourse",
+      foreignField: "_id",
+      as: "courseInfo"
+    }
+  },
+  { $unwind: "$courseInfo" },
+  { $match: { "courseInfo.title": "Machine Learning" } },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      courseTitle: "$courseInfo.title"
+    }
+  }
+]);
+
