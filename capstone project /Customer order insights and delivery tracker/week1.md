@@ -120,3 +120,68 @@ DELIMITER ;
 ```
 CALL orders.GetDelayedDeliveries(1);
 ```
+### <p align="center" > MongoDB </p>
+
+###  Tasks
+- Create a MongoDB database and collection  
+- Insert sample feedback documents  
+- Index the collection by `customer_id`  
+- Perform basic queries
+
+---
+
+##  MongoDB Script
+
+```js
+// 1. Use or Create Database
+use customer_orders;
+
+// 2. Create Collection & Insert Sample Feedback
+db.feedback.insertMany([
+  {
+    customer_id: 1,
+    name: "Mani",
+    feedback: "Delivery was late and packaging was poor.",
+    timestamp: new Date()
+  },
+  {
+    customer_id: 2,
+    name: "Mothesh",
+    feedback: "Very satisfied with the fast delivery!",
+    timestamp: new Date()
+  },
+  {
+    customer_id: 3,
+    name: "Saravana",
+    feedback: "Received the wrong item. Support helped quickly.",
+    timestamp: new Date()
+  },
+  {
+    customer_id: 4,
+    name: "Manoj",
+    feedback: "Item was damaged. Not happy.",
+    timestamp: new Date()
+  },
+  {
+    customer_id: 5,
+    name: "Jeeva",
+    feedback: "Great service, will order again!",
+    timestamp: new Date()
+  },
+  {
+    customer_id: 6,
+    name: "Nithya",
+    feedback: "Late delivery but excellent support team.",
+    timestamp: new Date()
+  }
+]);
+```
+
+3. Create Index on customer_id
+```
+db.feedback.createIndex({ customer_id: 1 });
+```
+4. Query Feedback for a Specific Customer
+```
+db.feedback.find({ customer_id: 3 });
+```
