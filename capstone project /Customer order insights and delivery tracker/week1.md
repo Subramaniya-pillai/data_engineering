@@ -1,6 +1,8 @@
 # <p align="center" > Capstone Project: Customer Order Insights & Delivery Tracker  </p>
 
-## Week 1: Database Foundations – MySQL & MongoDB
+
+### <p align="center" >  Week 1: Database Foundations – MySQL & MongoDB </p>
+
 
 ---
 
@@ -13,134 +15,105 @@ Create a system to:
 ---
 
 
-##  MySQL Deliverables
-
-###  Table Design (DDL)
-
+### CREATE DATABASE
 ```
-CREATE TABLE customers (
-    customer_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE DATABASE customer_orders;
+```
+
+### USE DATABASE
+```
+USE customer_orders;
+```
+### CREATE SCHEMA
+```
+CREATE SCHEMA orders;
+
+CREATE TABLE: customers
+CREATE TABLE orders.customers (
+    customer_id INT PRIMARY KEY,
     name VARCHAR(100),
-    email VARCHAR(100),
-    phone VARCHAR(15)
+    email VARCHAR(100)
 );
 
-CREATE TABLE orders (
-    order_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE: orders
+CREATE TABLE orders.orders (
+    order_id INT PRIMARY KEY,
     customer_id INT,
     order_date DATE,
     delivery_date DATE,
-    status VARCHAR(50),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    FOREIGN KEY (customer_id) REFERENCES orders.customers(customer_id) ON DELETE CASCADE
 );
 
-CREATE TABLE delivery_status (
-    delivery_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE: delivery_status
+CREATE TABLE orders.delivery_status (
+    status_id INT PRIMARY KEY,
     order_id INT,
     status VARCHAR(50),
-    updated_at DATETIME,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders.orders(order_id) ON DELETE CASCADE
 );
 ```
-### CRUD Operations
-
-Insert Sample Data
+### inserting data
 ```
--- Customers
-INSERT INTO customers (name, email, phone)
-VALUES 
-('mani', '.com', '1234567890'),
-('Bob', 'bob@example.com', '2345678901'),
-('Charlie', 'charlie@example.com', '3456789012');
+INSERT INTO orders.customers
+INSERT INTO orders.customers (customer_id, name, email) VALUES
+(1, 'mani', 'mani@email.com'),
+(2, 'saravana', 'saravna@email.com'),
+(3, 'shakthi', 'shathi@email.com');
 
--- Orders
-INSERT INTO orders (customer_id, order_date, delivery_date, status)
-VALUES 
-(1, '2025-06-01', '2025-06-05', 'Delivered'),
-(1, '2025-06-10', '2025-06-14', 'Delayed'),
-(2, '2025-06-02', '2025-06-06', 'Delivered'),
-(3, '2025-06-03', '2025-06-09', 'Delayed');
+-- INSERT INTO orders.orders
+INSERT INTO orders.orders (order_id, customer_id, order_date, delivery_date) VALUES
+(101, 1, '2025-05-25', '2025-05-30'),
+(102, 1, '2025-05-28', '2025-06-02'),
+(103, 2, '2025-05-27', '2025-06-05'),
+(104, 3, '2025-05-29', '2025-06-10');
 
--- Delivery Status
-INSERT INTO delivery_status (order_id, status, updated_at)
-VALUES 
-(1, 'Delivered', NOW()),
-(2, 'Delayed', NOW()),
-(3, 'Delivered', NOW()),
-(4, 'Delayed', NOW());
+-- INSERT INTO orders.delivery_status
+INSERT INTO orders.delivery_status (status_id, order_id, status) VALUES
+(1, 101, 'Delivered'),
+(2, 102, 'In Transit'),
+(3, 103, 'Pending'),
+(4, 104, 'Delivered');
+```
+### CRUD OPERATIONS
 
+### INSERT (CREATE)
+```
+INSERT INTO orders.orders (order_id, customer_id, order_date, delivery_date)
+VALUES (105, 1, '2025-05-25', '2025-05-30');
+```
+### SELECT (READ)
+```
+SELECT * FROM orders.orders;
+```
+### UPDATE
+```
+UPDATE orders.orders
+SET delivery_date = '2025-06-01'
+WHERE order_id = 101;
+```
+### DELETE
+```
+DELETE FROM orders.orders WHERE order_id = 101;
 ```
 
-###  Read 
-
-```
-SELECT * FROM orders WHERE customer_id = 1;
-```
-### Update 
-```
-UPDATE orders SET status = 'Delivered' WHERE order_id = 2;
-```
-
-### Delete 
-```
-DELETE FROM delivery_status WHERE delivery_id = 4;
-```
-
-### Stored Procedure: Delayed Deliveries
+### STORED PROCEDURE: Delayed Deliveries for a Customer
 ```
 DELIMITER $$
 
-CREATE PROCEDURE GetDelayedDeliveries(IN cust_id INT)
+CREATE PROCEDURE orders.GetDelayedDeliveries(IN CustomerId INT)
 BEGIN
-    SELECT o.order_id, o.delivery_date, o.status
-    FROM orders o
-    WHERE o.customer_id = cust_id AND o.status = 'Delayed';
-END$$
+    SELECT o.order_id, o.delivery_date
+    FROM orders.orders o
+    JOIN orders.delivery_status d ON o.order_id = d.order_id
+    WHERE o.customer_id = CustomerId
+      AND o.delivery_date < CURDATE()
+      AND d.status <> 'Delivered';
+END $$
 
 DELIMITER ;
 ```
-
-### Call:
+### CALL PROCEDURE (example)
 ```
-CALL GetDelayedDeliveries(1);
-
-```
-# <p align="center" > MongoDB Deliverables </p>
-
- 
-###  Insert Sample Feedback
-```
-use customer_feedback
-
-db.feedback.insertMany([
-  {
-    customer_id: 1,
-    feedback: "The order was late but customer service was helpful.",
-    date: new Date("2025-06-01")
-  },
-  {
-    customer_id: 2,
-    feedback: "Fast delivery. Great experience!",
-    date: new Date("2025-06-02")
-  },
-  {
-    customer_id: 1,
-    feedback: "Package was damaged on arrival.",
-    date: new Date("2025-06-12")
-  },
-  {
-    customer_id: 3,
-    feedback: "Delivery was delayed, but I was informed in advance.",
-    date: new Date("2025-06-13")
-  },
-  {
-    customer_id: 2,
-    feedback: "Smooth and quick ordering process.",
-    date: new Date("2025-06-15")
-  }
-])
-```
-###  Index by Customer ID
-```
-db.feedback.createIndex({ customer_id: 1 })
+CALL orders.GetDelayedDeliveries(1);
 ```
