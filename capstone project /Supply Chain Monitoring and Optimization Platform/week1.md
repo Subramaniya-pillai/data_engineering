@@ -6,7 +6,7 @@ Build a practical system to track orders, inventory, and shipments using real-wo
 MongoDB, Python, PySpark, Azure Databricks, and Azure DevOps.
 
 
-##  <p align="center"> Week 1 – Database Foundations: MySQL & MongoDB </p>
+###  <p align="center"> Week 1 – Database Foundations: MySQL & MongoDB </p>
 
 
 ### Capstone Tasks:
@@ -20,8 +20,7 @@ Store shipment logs in MongoDB
 
 Create indexes for efficient querying
 
-###  <p align="center">Schema definition </p>
-
+### <p align="center"> MySQL Schema Definition </p>
 ```
 -- Create Suppliers Table
 CREATE TABLE suppliers (
