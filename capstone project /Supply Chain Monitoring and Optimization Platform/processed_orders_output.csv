@@ -1,0 +1,7 @@
+order_id,supplier_id,supplier_name,product_id,product_name,quantity,order_date,delivery_date,unit_price,status,warehouse_location,delay_days,is_delayed,total_cost
+101,1,Alpha Supplies,501,Laptop,10,2025-05-20,2025-05-28,800,Delivered,Warehouse A,5,1,8000
+102,2,Beta Distributors,502,Mouse,20,2025-05-25,2025-06-01,25,Delivered,Warehouse B,1,1,500
+103,1,Alpha Supplies,503,Keyboard,15,2025-05-22,2025-05-25,45,Delivered,Warehouse A,8,1,675
+104,3,Gamma Corp,504,Monitor,5,2025-05-24,2025-05-29,150,Delivered,Warehouse C,4,1,750
+105,2,Beta Distributors,505,Printer,8,2025-05-30,2025-06-03,200,Pending,Warehouse B,-1,0,1600
+106,3,Gamma Corp,506,Webcam,12,2025-05-27,2025-06-02,60,Delivered,Warehouse C,0,0,720
