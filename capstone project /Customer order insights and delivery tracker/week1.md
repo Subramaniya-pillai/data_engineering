@@ -27,15 +27,17 @@ USE customer_orders;
 ### CREATE SCHEMA
 ```
 CREATE SCHEMA orders;
-
+```
 CREATE TABLE: customers
+```
 CREATE TABLE orders.customers (
     customer_id INT PRIMARY KEY,
     name VARCHAR(100),
     email VARCHAR(100)
 );
-
+```
 CREATE TABLE: orders
+```
 CREATE TABLE orders.orders (
     order_id INT PRIMARY KEY,
     customer_id INT,
@@ -43,8 +45,9 @@ CREATE TABLE orders.orders (
     delivery_date DATE,
     FOREIGN KEY (customer_id) REFERENCES orders.customers(customer_id) ON DELETE CASCADE
 );
-
+```
 CREATE TABLE: delivery_status
+```
 CREATE TABLE orders.delivery_status (
     status_id INT PRIMARY KEY,
     order_id INT,
