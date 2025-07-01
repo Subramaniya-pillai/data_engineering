@@ -46,18 +46,45 @@ Save the summary DataFrame
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import to_date, current_date, datediff, col
 
-spark = SparkSession.builder.appName("SupplyChainDelayProcessing").getOrCreate()
+# Start Spark session
+spark = SparkSession.builder \
+    .appName("SupplyChainDelayProcessing") \
+    .getOrCreate()
 
+# Step 1: Load CSV data
 df = spark.read.option("header", True).csv("/Volumes/workspace/default/subramani/supply_chain_orders.csv")
-df = df.withColumn("delivery_date", to_date(col("delivery_date"), "yyyy-MM-dd"))
-df = df.withColumn("delay_days", datediff(current_date(), col("delivery_date")))
-delayed_df = df.filter(col("delay_days") > 0)
-summary_df = delayed_df.groupBy("supplier_id").count().withColumnRenamed("count", "delayed_shipments")
+print("🔹 Raw Data:")
+df.show()
 
+# Step 2: Convert delivery_date to proper date format
+df = df.withColumn("delivery_date", to_date(col("delivery_date"), "yyyy-MM-dd"))
+print("🔹 After converting delivery_date to date:")
+df.show()
+
+# Step 3: Calculate delay_days
+df = df.withColumn("delay_days", datediff(current_date(), col("delivery_date")))
+print("🔹 After calculating delay_days:")
+df.show()
+
+# Step 4: Filter delayed shipments (delay_days > 0)
+delayed_df = df.filter(col("delay_days") > 0)
+print("🔹 Filtered delayed shipments (delay_days > 0):")
+delayed_df.show()
+
+# Step 5: Group by supplier_id and count delayed shipments
+summary_df = delayed_df.groupBy("supplier_id") \
+    .count() \
+    .withColumnRenamed("count", "delayed_shipments")
+print("🔹 Grouped delay summary by supplier:")
+summary_df.show()
+
+# Step 6: Save result to workspace path (no overwrite of previous files)
 output_path = "/Volumes/workspace/default/subramani/output_temp"
 summary_df.coalesce(1).write.mode("overwrite").option("header", True).csv(output_path)
 
-print(" Output saved to:", output_path)
+print(" Output saved to folder:", output_path)
+
+# Stop Spark session
 spark.stop()
 
 ```
