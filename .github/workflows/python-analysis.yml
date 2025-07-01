@@ -22,5 +22,5 @@ jobs:
         run: pip install pandas
 
       - name: 🧮 Run delay analysis
-        working-directory: data_engineering
+        working-directory: data_engineering  # << this is your actual folder inside the repo
         run: python delay_analysis.py
