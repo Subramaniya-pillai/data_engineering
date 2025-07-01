@@ -23,10 +23,10 @@ jobs:
 
     - name: Run Delay Analysis Script
       run: |
-        python "capstone project /Customer order insights and delivery tracker/week 5/delay_analysis.py"
+        python "capstone project/Customer order insights and delivery tracker/week 5/delay_analysis.py"
 
     - name: Upload Delay Summary Artifact
       uses: actions/upload-artifact@v4
       with:
         name: delay-summary
-        path: "capstone project /Customer order insights and delivery tracker/week 5/delay_summary.csv"
+        path: "capstone project/Customer order insights and delivery tracker/week 5/delay_summary.csv"
