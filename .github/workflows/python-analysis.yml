@@ -1,25 +1,32 @@
-name: Run Delay Analysis
+name: Delay Analysis CI
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  run-analysis:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name:  Checkout code
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
-      - name:  Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: 3.10
 
-      - name:  Install Dependencies
-        run: pip install pandas
+      - name: 📦 Install Dependencies
+        run: |
+          pip install pandas matplotlib
 
-      - name:  Run Python Script
+      - name: ▶️ Run Delay Analysis Script
         run: python delay_analysis.py
+
+      - name: 📤 Upload Delay Summary Chart
+        uses: actions/upload-artifact@v3
+        with:
+          name: delay-summary-graph
+          path: delay_summary_chart.png
