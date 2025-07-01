@@ -8,4 +8,4 @@ df['delayed'] = np.where(df['delay_days'] > 0, 1, 0)
 
 summary = df.groupby('customer_id')['delayed'].sum().sort_values(ascending=False)
 summary.to_csv('delay_summary.csv', header=True)
-print("✅ Delay summary generated.")
+print(" Delay summary generated.")
