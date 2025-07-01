@@ -20,3 +20,16 @@ output_file = f'delayed_summary_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
 summary.to_csv(output_file, index=False)
 
 print(" Delay summary saved to:", output_file)
+import matplotlib.pyplot as plt
+
+# Bar chart for delayed shipments per supplier
+summary_df = df[df['delay_days'] > 0].groupby('supplier_id').size().reset_index(name='delayed_shipments')
+
+plt.figure(figsize=(8, 5))
+plt.bar(summary_df['supplier_id'], summary_df['delayed_shipments'], color='orange')
+plt.xlabel("Supplier ID")
+plt.ylabel("Delayed Shipments")
+plt.title("Delayed Shipments by Supplier")
+plt.tight_layout()
+plt.savefig("delay_summary_chart.png")  # Saves chart as PNG
+print(" Chart saved as delay_summary_chart.png")
