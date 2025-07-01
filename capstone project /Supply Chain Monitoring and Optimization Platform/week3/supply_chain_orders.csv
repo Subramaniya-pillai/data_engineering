@@ -1,0 +1,9 @@
+order_id,supplier_id,delivery_date,product,quantity
+O1001,S001,2024-06-20,Laptop,10
+O1002,S002,2024-06-15,Keyboard,50
+O1003,S001,2024-06-30,Mouse,25
+O1004,S003,2024-05-20,Monitor,15
+O1005,S002,2024-06-10,USB Cable,100
+O1006,S001,2024-06-25,Printer,5
+O1007,S003,2024-04-28,Desk Chair,8
+O1008,S004,2024-06-01,Router,12
