@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 from datetime import datetime
 
 # Load data
@@ -20,7 +21,7 @@ output_file = f'delayed_summary_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
 summary.to_csv(output_file, index=False)
 
 print(" Delay summary saved to:", output_file)
-import matplotlib.pyplot as plt
+
 
 # Bar chart for delayed shipments per supplier
 summary_df = df[df['delay_days'] > 0].groupby('supplier_id').size().reset_index(name='delayed_shipments')
