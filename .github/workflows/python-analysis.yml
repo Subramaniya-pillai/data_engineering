@@ -22,4 +22,4 @@ jobs:
         run: pip install pandas
 
       - name:  Run delay analysis
-        run: python week5/delay_analysis.py
+        run: python data_engineering/delay_analysis.py
