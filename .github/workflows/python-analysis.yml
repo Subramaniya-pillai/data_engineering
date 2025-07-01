@@ -23,10 +23,10 @@ jobs:
 
     - name: Run Delay Analysis Script
       run: |
-        python data_engineering/delay_analysis.py
+        python delay_analysis.py
 
     - name: Upload Delay Summary Artifact
       uses: actions/upload-artifact@v4
       with:
         name: delay-summary
-        path: data_engineering/delay_summary.csv
+        path: delay_summary.csv
