@@ -26,7 +26,7 @@ jobs:
         run: python delay_analysis.py
 
       - name: 📤 Upload Delay Summary Chart
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: delay-summary-graph
           path: delay_summary_chart.png
