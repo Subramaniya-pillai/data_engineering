@@ -1,32 +1,19 @@
-name: Delay Summary Report
+trigger:
+  - main
 
-on:
-  push:
-    branches: [ main ]
+pool:
+  vmImage: 'ubuntu-latest'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
 
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+  - script: |
+      pip install pandas
+    displayName: 'Install dependencies'
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Install Dependencies
-      run: |
-        pip install pandas numpy
-
-    - name: Run Delay Analysis Script
-      run: |
-        python delay_analysis.py
-
-    - name: Upload Delay Summary Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: delay-summary
-        path: delay_summary.csv
+  - script: |
+      python week5/delay_analysis.py
+    displayName: 'Run Delay Analysis'
