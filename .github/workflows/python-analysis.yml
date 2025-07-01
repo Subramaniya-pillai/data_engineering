@@ -10,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name:  Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v3
 
-      - name:  Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name:  Install dependencies
+      - name: 📦 Install dependencies
         run: pip install pandas
 
-      - name:  Run delay analysis
-        run: python data_engineering/delay_analysis.py
+      - name: 🧮 Run delay analysis
+        working-directory: data_engineering
+        run: python delay_analysis.py
