@@ -1,12 +1,22 @@
 import pandas as pd
-import numpy as np
+from datetime import datetime
 
-df = pd.read_csv('order.csv')  # ✅ use correct filename
+# Load data
+df = pd.read_csv('supply_chain_orders.csv')
+
+# Convert to datetime
 df['delivery_date'] = pd.to_datetime(df['delivery_date'])
+
+# Calculate delay
 df['delay_days'] = (pd.Timestamp.today() - df['delivery_date']).dt.days
-df['delayed'] = np.where(df['delay_days'] > 0, 1, 0)
+df['is_delayed'] = (df['delay_days'] > 0).astype(int)
 
-summary = df.groupby('customer_id')['delayed'].sum().sort_values(ascending=False)
-summary.to_csv('delay_summary.csv', header=True)
+# Summary
+summary = df[df['is_delayed'] == 1].groupby('supplier_id')['order_id'].count().reset_index()
+summary.columns = ['supplier_id', 'delayed_orders']
 
-print("✅ Delay summary generated.")
+# Save output
+output_file = f'delayed_summary_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+summary.to_csv(output_file, index=False)
+
+print(" Delay summary saved to:", output_file)
