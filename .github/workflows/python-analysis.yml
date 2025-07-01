@@ -21,11 +21,13 @@ jobs:
       run: |
         pip install pandas numpy
 
-    - name: Run Delay Analysis
-      run: python delay_analysis.py
+    - name: Run Delay Analysis Script
+      run: |
+        cd "capstone project/Customer order insights and delivery tracker/week 5"
+        python delay_analysis.py
 
-    - name: Upload Delay Report
-      uses: actions/upload-artifact@v3
+    - name: Upload Delay Summary Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: delay-summary
-        path: delay_summary.csv
+        path: capstone project/Customer order insights and delivery tracker/week 5/delay_summary.csv
